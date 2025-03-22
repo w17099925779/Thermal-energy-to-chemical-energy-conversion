@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>热能-化学能转化模拟器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .reactor {
+            width: 200px;
+            height: 300px;
+            margin: 20px auto;
+            position: relative;
+            background: #e0e0e0;
+            border-radius: 10px;
+        }
+
+        .flame {
+            width: 100px;
+            height: 50px;
+            background: linear-gradient(orange, red);
+            margin: 0 auto;
+            border-radius: 0 0 50px 50px;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .fuel-tank {
+            width: 150px;
+            height: 200px;
+            border: 2px solid #333;
+            margin: 20px auto;
+            position: relative;
+        }
+
+        .fuel-level {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: linear-gradient(#4CAF50, #45a049);
+            transition: height 0.5s;
+        }
+
+        button {
+            background: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>热能-化学能转化模拟器</h1>
+        
+        <div class="reactor">
+            <div class="flame" id="flame"></div>
+        </div>
+
+        <div class="controls">
+            <label>热能输入 (kJ): </label>
+            <input type="number" id="heatInput" value="100" min="0" step="50">
+            <button onclick="startConversion()">开始转化</button>
+        </div>
+
+        <div class="fuel-tank">
+            <div class="fuel-level" id="fuelLevel" style="height: 0%"></div>
+        </div>
+
+        <p>储存的化学能: <span id="energyOutput">0</span> kJ</p>
+    </div>
+
+    <script>
+        let storedEnergy = 0;
+
+        function startConversion() {
+            const heatInput = parseFloat(document.getElementById('heatInput').value);
+            const flame = document.getElementById('flame');
+            const fuelLevel = document.getElementById('fuelLevel');
+            const outputDisplay = document.getElementById('energyOutput');
+
+            // 显示火焰动画
+            flame.style.opacity = 1;
+            
+            // 模拟能量转化过程（简化模型）
+            setTimeout(() => {
+                // 根据热力学第二定律假设20%转换效率
+                const convertedEnergy = heatInput * 0.2;
+                storedEnergy += convertedEnergy;
+
+                // 更新显示
+                const tankHeight = Math.min((storedEnergy / 500) * 100, 100);
+                fuelLevel.style.height = tankHeight + '%';
+                outputDisplay.textContent = storedEnergy.toFixed(1);
+
+                // 重置火焰
+                flame.style.opacity = 0;
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
